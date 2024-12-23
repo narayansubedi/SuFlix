@@ -1,81 +1,63 @@
-
 import MovieCard from "../components/MovieCard.jsx";
-import {useState, useEffect} from "react"
-import "../css/Home.css"
-import {searchMovies, getPopularMovies} from "../services/api.js";
+import { useState, useEffect } from "react";
+import "../css/Home.css";
+import { searchMovies, getPopularMovies } from "../services/api.js";
+import NavBar from "../components/NavBar.jsx";
 
-function Home(){
-
-    const[searchQuery, setSearchQuery] = useState("")
-    const [movies, setMovies] = useState([])
-    const [error, setError] = useState(null)
-    const [loading, setLoading] = useState(true)
+function Home() {
+    const [movies, setMovies] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadPopularMovies = async () => {
             try {
-                const popularMovies = await getPopularMovies()
-                setMovies(popularMovies)
+                const popularMovies = await getPopularMovies();
+                setMovies(popularMovies);
             } catch (err) {
-                console.log(err)
-                setError("Failed to load movies...")
+                console.log(err);
+                setError("Failed to load movies...");
+            } finally {
+                setLoading(false);
             }
-            finally {
-                setLoading(false)
-            }
-        }
+        };
 
-        loadPopularMovies()
+        loadPopularMovies();
+    }, []);
 
-    }, [])
-
-    const handlesearch = async (e) => {
-        e.preventDefault()
-
-        if (!searchQuery.trim()) return
+    const handlesearch = async (query) => {
+        if (!query.trim()) return;
 
         if (loading) return;
 
-        setLoading(true)
+        setLoading(true);
         try {
-            const searchResults = await searchMovies(searchQuery)
-            setMovies(searchResults)
-            setError(null)
+            const searchResults = await searchMovies(query);
+            setMovies(searchResults);
+            setError(null);
         } catch (err) {
-            console.log(err)
-            setError("Failed to search movies...")
+            console.log(err);
+            setError("Failed to search movies...");
         } finally {
-            setLoading (false)
+            setLoading(false);
         }
-
-
-        setSearchQuery("")
     };
 
-    return(
+    return (
         <div className="home">
-            <form onSubmit = {handlesearch} className = "search-form">
-                <input
-                    type="text"
-                    placeholder ="Search for movies..."
-                    className = "search-input"
-                    value = {searchQuery}
-                    onChange = {(e) => setSearchQuery(e.target.value)}
-                />
-                <button type="submit" className="search-button">Search</button>
-            </form>
+            <NavBar onNavbarSearch={handlesearch} />
 
             {loading ? (
                 <div className="loading">Loading...</div>
-                ) : (
-                    <div className = "movies-grid">
-                        {movies.map((movie) => (
-                                <MovieCard movie = {movie} key = {movie.id} />
-                        ))}
-                    </div>
-                )}
+            ) : (
+                <div className="movies-grid">
+                    {movies.map((movie) => (
+                        <MovieCard movie={movie} key={movie.id} />
+                    ))}
+                </div>
+            )}
         </div>
-    )
+    );
 }
 
-export default Home
+export default Home;
