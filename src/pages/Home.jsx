@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import "../css/Home.css";
 import { searchMovies, getPopularMovies } from "../services/api.js";
 import NavBar from "../components/NavBar.jsx";
+import { Link } from "react-router-dom"; // Import Link
 
 function Home() {
     const [movies, setMovies] = useState([]);
@@ -52,7 +53,9 @@ function Home() {
             ) : (
                 <div className="movies-grid">
                     {movies.map((movie) => (
-                        <MovieCard movie={movie} key={movie.id} />
+                        <Link to={`/movie/${movie.id}`} key={movie.id}>
+                            <MovieCard movie={movie} />
+                        </Link>
                     ))}
                 </div>
             )}

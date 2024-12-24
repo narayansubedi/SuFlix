@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/Navbar.css";
+import searchIcon from "../assets/search.png";
+import reloadIcon from "../assets/reload.png";
 
 function NavBar({ onNavbarSearch }) {
     const [searchQuery, setSearchQuery] = useState("");
@@ -49,11 +51,11 @@ function NavBar({ onNavbarSearch }) {
                     onChange={handleInputChange}
                 />
                 <button type="submit" className="search-button">
-                    🔍
+                    <img src={searchIcon} alt="Search" className="icon" />
                 </button>
             </form>
             <span className="reload-icon" onClick={handleReloadClick}>
-                🔄
+                <img src={reloadIcon} alt="Reload" className="icon" />
             </span>
             <div className="navbar-links">
                 <Link to="/" className="nav-link">Home</Link>

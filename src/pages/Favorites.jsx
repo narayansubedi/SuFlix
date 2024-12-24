@@ -1,17 +1,20 @@
 import "../css/Favorites.css";
 import { useMovieContext } from "../contexts/MovieContext";
 import MovieCard from "../components/MovieCard";
+import { Link } from "react-router-dom";
 
 function Favorites() {
     const { favorites } = useMovieContext();
 
-    if (favorites) {
+    if (favorites && favorites.length > 0) {
         return (
             <div className="favorites">
                 <h2>Your Favorites</h2>
                 <div className="movies-grid">
                     {favorites.map((movie) => (
-                        <MovieCard movie={movie} key={movie.id} />
+                        <Link to={`/movie/${movie.id}`} key={movie.id}>
+                            <MovieCard movie={movie} />
+                        </Link>
                     ))}
                 </div>
             </div>
